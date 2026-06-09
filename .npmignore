@@ -1,0 +1,10 @@
+src/
+node_modules/
+tsconfig.json
+release.sh
+.github/
+.gitignore
+.idea/
+.vscode/
+*.log
+.DS_Store

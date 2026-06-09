@@ -1,0 +1,39 @@
+{
+  "name": "@maximcoding/shared-marketplace",
+  "version": "1.0.0",
+  "description": "Multi-vertical marketplace shared library — TypeScript interfaces, enums, and contracts for any marketplace platform (Real Estate, Marketplace items, Services, Cars, …). Used by gagot (RealEstate vertical) and colaido (general marketplace).",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
+    "release": "./release.sh",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maximcoding/shared-marketplace.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maximcoding/shared-marketplace/issues"
+  },
+  "homepage": "https://github.com/maximcoding/shared-marketplace#readme",
+  "keywords": [
+    "marketplace",
+    "typescript",
+    "shared",
+    "interfaces",
+    "enums",
+    "real-estate"
+  ],
+  "author": "Maxim Livshitz",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.14.8",
+    "typescript": "^5.5.2"
+  }
+}
