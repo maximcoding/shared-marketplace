@@ -1,12 +1,11 @@
+import { ITimestamped } from "../types/utility.types";
+
 /**
- * Recently-viewed property record per user. Canonical table:
- * `gagot-api/src/db/schema/recent.ts`. Read endpoint surfaces a list
- * for the authenticated user; consumers display "continue browsing".
+ * Recently-viewed asset record per user. Naming aligned with
+ * camelCase convention (was `propertyID`/`userID` in v1).
  */
-export interface IRecent {
+export interface IRecent extends ITimestamped {
   _id?: string;
-  readonly propertyID: string;
-  readonly userID: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
+  readonly propertyId: string;
+  readonly userId: string;
 }

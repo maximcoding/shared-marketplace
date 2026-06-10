@@ -1,3 +1,5 @@
+import { ISODateString } from "../../types/utility.types";
+
 /**
  * Payment-related types. Designed to support Stripe Connect (the
  * gagot roadmap item), PayPal, manual bank transfer, and cash flows.
@@ -20,10 +22,11 @@ export enum PaymentStatus {
 export interface IPaymentTransaction {
   _id?: string;
   userId: string;
-  paymentMethodId: string; // references ISavedPaymentMethod._id
+  /** Required for non-cash transactions; absent for `Cash`. */
+  paymentMethodId?: string;
   amount: number;
   status: PaymentStatus;
-  date: Date | string;
+  date: ISODateString | Date;
   /** JSON-stringified provider details (Stripe charge ID, PayPal txn, etc). */
   details?: string;
 }
@@ -35,7 +38,7 @@ interface IBaseSavedPaymentMethod {
   type: PaymentType;
   isDefault: boolean;
   providerName: string;
-  lastUsedDate?: Date | string;
+  lastUsedAt?: ISODateString | Date;
 }
 
 export interface ICreditCardPaymentMethod extends IBaseSavedPaymentMethod {

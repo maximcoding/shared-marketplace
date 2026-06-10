@@ -1,4 +1,5 @@
 import { MainCategory } from "../../enums/main-category.enum";
+import { ISODateString } from "../../types/utility.types";
 
 /**
  * A user's saved asset — single record per (user, asset) pair.
@@ -8,5 +9,5 @@ import { MainCategory } from "../../enums/main-category.enum";
 export interface IFavorite {
   assetId: string;
   mainCategory: MainCategory;
-  favoritedAt?: Date | string;
+  favoritedAt: ISODateString | Date;
 }
