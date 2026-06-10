@@ -1,6 +1,8 @@
 import { Condition } from "../../enums/condition.enum";
 import { MarketplaceItemStatus } from "../../enums/common-status.enum";
+import { DimensionUnit, WeightUnit } from "../../enums/units.enum";
 import { IDeliveryOptions } from "../commerce/delivery.interface";
+import { ISODateString } from "../../types/utility.types";
 import { IAsset, IAssetStats } from "./asset.interface";
 
 /**
@@ -19,8 +21,8 @@ export interface IAuctionBid {
 }
 
 export interface IAuction {
-  startDate: Date | string;
-  endDate: Date | string;
+  startDate: ISODateString | Date;
+  endDate: ISODateString | Date;
   startingBid: IAuctionBid;
   currentBid?: IAuctionBid;
 }
@@ -29,12 +31,12 @@ export interface IDimensions {
   length: number;
   width: number;
   height: number;
-  unit: "cm" | "inch";
+  unit: DimensionUnit;
 }
 
 export interface IWeight {
   value: number;
-  unit: "kg" | "lb";
+  unit: WeightUnit;
 }
 
 export interface IMarketPlaceItem extends IAsset {
@@ -52,7 +54,7 @@ export interface IMarketPlaceItem extends IAsset {
   discounts?: {
     percentage?: number;
     amount?: number;
-    validUntil?: Date | string;
+    validUntil?: ISODateString | Date;
   };
   /** Free-form per-vertical attributes. */
   additionalAttributes?: Record<string, string>;

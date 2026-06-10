@@ -1,3 +1,5 @@
+import { ITimestamped, ISODateString } from "../../types/utility.types";
+
 export enum OrderStatus {
   Pending = "Pending",
   Processing = "Processing",
@@ -23,19 +25,17 @@ export interface IOrderItem {
   price: number;
 }
 
-export interface IOrder {
+export interface IOrder extends ITimestamped {
   _id?: string;
   customerId: string;
   sellerId: string;
-  orderDate: Date | string;
-  shippingAddress?: IShippingAddress;
+  orderDate: ISODateString | Date;
+  shippingAddress: IShippingAddress;
   items: IOrderItem[];
   totalAmount: number;
   paymentId?: string;
   status: OrderStatus;
   trackingNumber?: string;
-  estimatedDeliveryDate?: Date | string;
+  estimatedDeliveryDate?: ISODateString | Date;
   notes?: string;
-  createdAt?: Date | string;
-  updatedAt?: Date | string;
 }

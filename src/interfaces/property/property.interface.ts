@@ -11,36 +11,36 @@ import {
 import { KitchenEnum } from "../../enums/kitchen.enum";
 import { FacilitiesEnum } from "../../enums/facilities.enum";
 import { IFile } from "../file.interface";
-import { IUser } from "../user.interface";
+import { IUserPublic } from "../user.interface";
 import { IAsset } from "../asset/asset.interface";
 import { IRoom } from "./room.interface";
 import { IVisit } from "./visit.interface";
+import { Ref, RefList } from "../../types/utility.types";
 
 /**
  * Compact card-shape used in listing views (`GET /properties/all`,
- * `GET /properties/search/*`). Subset of `IProperty`.
+ * `GET /properties/search/*`). Picks the cross-vertical fields from
+ * `IAsset` + real-estate-specific scalar fields that drive list UI.
  *
- * Fields are intentionally optional on the wire — lean responses,
- * search facets, draft listings, and partial seed data all live
- * within this shape. Required-ness is enforced at the DTO level on
- * the API side (`CreatePropertyPayload` etc., decorated with
- * `class-validator`).
+ * All fields optional — lean responses, search facets, draft listings,
+ * and partial seed data all live within this shape. Required-ness is
+ * enforced at the DTO level on the API side (`CreatePropertyPayload`
+ * etc., decorated with `class-validator`).
  */
-export interface IPropertyPreview {
-  _id?: string;
-  address?: string;
-  coordinate?: [number, number];
+export interface IPropertyPreview extends Pick<
+  IAsset,
+  "_id" | "title" | "mainCategory" | "multimedia" | "stats" | "location"
+> {
   square?: number;
   squareUnits?: MeasurementEnum;
   status?: PropertyStatus;
-  title?: string;
   state?: PropertyState[];
   floors?: number;
   price?: number;
   currency?: CurrencyEnum;
   deposit?: number;
   categoryName?: CategoryEnum;
-  rooms?: IRoom[] | string[];
+  rooms?: RefList<IRoom>;
   files?: IFile[];
 }
 
@@ -48,23 +48,17 @@ export interface IPropertyPreview {
  * Full property shape returned by `GET /properties/:id`.
  *
  * Extends `IAsset` (the generic marketplace base) — gagot is the
- * RealEstate vertical of a broader marketplace platform; `IAsset`
- * carries cross-vertical fields (`title`, `description`, `tags`,
- * `stats`, `multimedia`, `location`, `reviews`), and this interface
- * adds every real-estate-specific field (rooms, visits, amenities,
- * agreement files, 360° tours, etc.).
+ * RealEstate vertical of a broader marketplace platform. Adds every
+ * real-estate-specific field (rooms, visits, amenities, agreement
+ * files, 360° tours, etc.).
  *
- * Where gagot's older bespoke fields overlap with IAsset (e.g.
- * `title`, `description`) the IAsset slot wins; the gagot-rich field
- * set below is everything that's NOT in IAsset.
- *
- * Note: `IPropertyPreview` (lighter list shape) does NOT extend IAsset
- * — list responses ship lean payloads and `IAsset`'s richer shape would
- * be wasted bytes.
+ * FK shapes use `Ref<T>` (entity OR id) and `RefList<T>` (all entities
+ * OR all ids — never mixed) — see `types/utility.types.ts`.
  */
 export interface IProperty extends IPropertyPreview, IAsset {
   newConstruction?: boolean;
   yearBuild?: number;
+  description?: string;
   nextTo?: NextToEnum[];
   onTheLand?: boolean;
   lastFloor?: boolean;
@@ -74,15 +68,11 @@ export interface IProperty extends IPropertyPreview, IAsset {
   facilities?: FacilitiesEnum[];
   safetyAmenities?: SafetyAmenitiesEnum[];
   additionalDetails?: boolean;
-  /**
-   * Aggregate rating — overlaps with `IAsset.stats.shares|favorites`
-   * but kept as a top-level field for gagot back-compat.
-   */
+  /** Aggregate rating — useful surface for list UIs without computing from reviews. */
   rating?: number;
-  owner?: IUser | string;
-  visits?: IVisit[] | string[];
-  // File references on the wire can be either populated entities
-  // (server include) or opaque IDs / URLs (lean payloads).
+  owner?: Ref<IUserPublic>;
+  visits?: RefList<IVisit>;
+  // Property-specific media — full `IFile` entities OR opaque IDs/URLs.
   images360?: Array<IFile | string>;
   images?: Array<IFile | string>;
   cancellation?: IFile | string;

@@ -1,24 +1,19 @@
 import { AddressType } from "../enums/address-type.enum";
 
 /**
- * Geographic address + coordinate. Shape designed to be marketplace-
- * generic — works for any vertical (RealEstate, Cars, Services, …).
+ * Geographic address + coordinate. Designed to be marketplace-generic —
+ * works for any vertical (RealEstate, Cars, Services, …).
  *
- * Gagot-API stores `coordinate` as PostGIS `geography(Point, 4326)`
- * and exposes the `[lat, lng]` array form on the wire.
- *
- * The richer `lat`/`lng` numeric pair (colaido shape) is also
- * supported for consumers that prefer them over the tuple form.
+ * Coordinates are exposed as `[lat, lng]` tuple (PostGIS-friendly,
+ * matches gagot-API's wire contract). The duplicate `lat`/`lng`
+ * scalar pair (colaido shape) is dropped in v2 — pick one
+ * representation.
  */
 export interface IAddress {
   /** Free-form address line. */
   address?: string;
-  /** PostGIS-friendly `[lat, lng]` tuple (gagot wire convention). */
+  /** `[lat, lng]` tuple — single canonical coord representation. */
   coordinate?: [number, number];
-  /** Numeric latitude (alternative to `coordinate[0]`). */
-  lat?: number;
-  /** Numeric longitude (alternative to `coordinate[1]`). */
-  lng?: number;
   city?: string;
   state?: string;
   country?: string;
