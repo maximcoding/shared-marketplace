@@ -83,10 +83,11 @@ export interface IErrorResponse {
 export type ISODateString = string & { readonly __brand: "ISODate" };
 
 /**
- * Time of day (`HH:MM` or `HH:MM:SS`, no timezone). Used in `IVisit`
- * `timeFrom` / `timeTo` and any per-day-of-the-week schedule slot.
+ * Time of day (`HH:MM` or `HH:MM:SS`, no timezone). Plain string alias —
+ * format is enforced at the API DTO level via class-validator `@Matches`,
+ * not at compile time. Type alias preserved for semantic documentation.
  */
-export type TimeString = string & { readonly __brand: "TimeString" };
+export type TimeString = string;
 
 /**
  * Currency code per ISO 4217 (`USD`, `EUR`, `ILS`, …). Wider type
